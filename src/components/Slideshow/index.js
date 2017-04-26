@@ -1,89 +1,108 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 import './Slideshow.css';
 import Slides from './Slides'
 import Controls from './Controls'
+import Loader from '../Loader'
 
 class Slideshow extends Component {
 
   constructor() {
     super()
-    const images = [
-      {
-        id         : "slide1",
-        imagePath  : "https://images.unsplash.com/photo-1474470172489-c75ce5cbf836?dpr=1&auto=compress,format&fit=crop&w=1199&h=799&q=80&cs=tinysrgb&crop=&bg=",
-        imageAlt   : "Slide 1 Image",
-        title      : "Slide 1",
-        subtitle   : "Slide 1 Image SubTitle",
-        text       : "Slide 1 Image Text",
-        action     : "Slide 1 Image Action",
-        actionHref : "href"
-      },
-      {
-        id         : "slide2",
-        imagePath  : "https://images.unsplash.com/photo-1474470172489-c75ce5cbf836?dpr=1&auto=compress,format&fit=crop&w=1199&h=799&q=80&cs=tinysrgb&crop=&bg=",
-        imageAlt   : "Slide 2 Image",
-        title      : "Slide 2",
-        subtitle   : "Slide 2 Image SubTitle",
-        text       : "Slide 2 Image Text",
-        action     : "Slide 2 Image Action",
-        actionHref : "href"
-      },
-      {
-        id         : "slide3",
-        imagePath  : "https://images.unsplash.com/photo-1474470172489-c75ce5cbf836?dpr=1&auto=compress,format&fit=crop&w=1199&h=799&q=80&cs=tinysrgb&crop=&bg=",
-        imageAlt   : "Slide 3 Image",
-        title      : "Slide 3",
-        subtitle   : "Slide 3 Image SubTitle",
-        text       : "Slide 3 Image Text",
-        action     : "Slide 3 Image Action",
-        actionHref : "href"
-      },
-    ];
+    const images = [];
 
     this.state = {
       currentSlide: 0,
-      images
+      images,
+      page: 1,
+      loading: false,
+      clicked: false
     }
 
     this.next = this.next.bind(this)
     this.prev = this.prev.bind(this)
+    this.fetchImages = this.fetchImages.bind(this)
+    this.renderLoader = this.renderLoader.bind(this)
+    this.timer = this.timer.bind(this)
+  }
+
+  componentDidMount() {
+    this.fetchImages()
+    this.timer()
+  }
+
+  fetchImages(next) {
+    this.setState({
+      loading: true
+    })
+    return axios
+      .get('https://api.unsplash.com/photos', {
+        params: {
+          page: this.state.page,
+          client_id: '6bb5bb78cfde81736048d37f2d3399d5024a6a5be277ad88a4b1a366a5e4f77f'
+        }
+      })
+      .then(data => {
+        console.log("DATA", data.data);
+        this.setState({
+          images: this.state.images.concat(data.data),
+          page: this.state.page + 1,
+          loading: false
+        }, () => {
+          if(next) this.setState({
+            currentSlide: this.state.currentSlide + 1
+          })
+        })
+      })
+      .catch(err => {
+        // need to handle error
+        console.log(err);
+      })
+  }
+
+  timer() {
+    setInterval(() => {
+      if(this.state.clicked) {
+        this.setState({
+          clicked: false
+        })
+      } else {
+        this.next()
+      }
+    }, 10000)
   }
 
   next() {
-    console.log("next");
-    const current = this.state.currentSlide;
-    let next = current + 1;
+    const next = this.state.currentSlide + 1;
     if (next > this.state.images.length - 1) {
-      next = 0;
+      this.fetchImages(true)
+    } else {
+      this.setState({
+        currentSlide: next,
+        clicked: true
+      })
     }
-    this.setState({
-      currentSlide: next
-    })
   }
 
   prev() {
-    console.log("prev");
-    const current = this.state.currentSlide;
-    let prev = current - 1;
+    let prev = this.state.currentSlide - 1;
     if (prev < 0) prev = this.state.images.length - 1;
     this.setState({
-      currentSlide: prev
+      currentSlide: prev,
+      clicked: true
     })
   }
 
-  // toggleSlide(id) {
-  //   console.log("toggleSlide");
-  //   let index = state.images.map(e => el.id);
-  //   let currentIndex = index.indexOf(id);
-  //   state.currentSlide = currentIndex;
-  //   render(state);
-  // }
+  renderLoader() {
+    if(this.state.loading) return <Loader />
+    return;
+  }
 
   render() {
-    console.log(this.state);
     return (
       <div className='slideshow'>
         <h1>Slideshow</h1>
+        {this.renderLoader()}
         <Slides images={this.state.images} currentSlide={this.state.currentSlide}/>
         <Controls prev={this.prev} next={this.next}/>
       </div>

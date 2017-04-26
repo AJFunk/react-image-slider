@@ -3,24 +3,14 @@ import './Slide.css';
 
 class Slide extends Component {
   render() {
-    const classes = this.props.active ? 'slide active' : 'slide'
+    const classes = this.props.active ? 'slide active animated fadeIn' : 'slide'
     const {
-      imagePath,
-      imageAlt,
-      title,
-      subtitle,
-      text,
-      actionHref,
-      action
+      url
     } = this.props;
 
     return (
       <div className={classes}>
-        <img src={imagePath} alt={imageAlt} />
-        <h2>{title}</h2>
-        <h3>{subtitle}</h3>
-        <p>{text}</p>
-        <a href={actionHref}>{action}</a>
+        <img src={url} alt='placeholder'/>
       </div>
     );
   }

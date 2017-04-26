@@ -1,0 +1,21 @@
+.slide {
+    display: none;
+    -webkit-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
+    opacity: 0;
+    height: 400px;
+    padding: 0 50px;
+}
+
+.slide.active {
+    display: block;
+    opacity: 1;
+}
+
+.slide img {
+    height: 100%;
+    margin: auto;
+    display: block;
+}

@@ -6,8 +6,8 @@ class Controls extends Component {
   render() {
     return (
       <div className="controls">
-        <div className="toggle prev" onClick={this.props.prev}>Prev</div>
-        <div className="toggle next" onClick={this.props.next}>Next</div>
+        <button className="btn btn-primary control-btn prev" onClick={this.props.prev}>Prev</button>
+        <button className="btn btn-primary control-btn next" onClick={this.props.next}>Next</button>
       </div>
     );
   }

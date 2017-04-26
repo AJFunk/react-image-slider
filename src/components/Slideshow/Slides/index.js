@@ -9,12 +9,13 @@ class Slides extends Component {
     const slides = this.props.images.map((e, index) => {
       const active = this.props.currentSlide === index;
       return (
-        <Slide active={active} key={e.id} imagePath={e.imagePath} imageAlt={e.imageAlt} title={e.title} subtitle={e.subtitle} text={e.text} action={e.action} actionHref={e.actionHref} />
+        <Slide active={active} key={e.id} url={e.urls.regular} />
       );
     });
 
     return (
       <div className="slides">
+        <h6>Image #{this.props.currentSlide+1}</h6>
         {slides}
       </div>
     );
