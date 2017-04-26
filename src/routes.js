@@ -7,14 +7,14 @@ import {
 import Navbar from './components/Navbar';
 
 import App from './components/App';
-import Example from './components/Example';
+import Slideshow from './components/Slideshow';
 
 const Routes = (props) => (
   <Router {...props}>
     <div>
       <Navbar />
       <Route exact path="/" component={App} />
-      <Route path="/example" component={Example} />
+      <Route path="/slideshow" component={Slideshow} />
     </div>
   </Router>
 );

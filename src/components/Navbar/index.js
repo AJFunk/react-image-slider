@@ -21,7 +21,7 @@ class Navbar extends Component {
                 <Link to='/'>Home</Link>
               </li>
               <li>
-                <Link to='/example'>Example</Link>
+                <Link to='/slideshow'>Slideshow</Link>
               </li>
             </ul>
           </div>
