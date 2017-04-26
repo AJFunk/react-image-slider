@@ -14,8 +14,8 @@ class Slides extends Component {
     });
 
     return (
-      <div className="slides">
-        <h6>Image #{this.props.currentSlide+1}</h6>
+      <div className='slides'>
+        <h3 className='text-center'>Image #{this.props.currentSlide}</h3>
         {slides}
       </div>
     );

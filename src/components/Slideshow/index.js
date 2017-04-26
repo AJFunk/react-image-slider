@@ -4,6 +4,7 @@ import './Slideshow.css';
 import Slides from './Slides'
 import Controls from './Controls'
 import Loader from '../Loader'
+import Pagination from './Pagination'
 
 class Slideshow extends Component {
 
@@ -24,6 +25,7 @@ class Slideshow extends Component {
     this.fetchImages = this.fetchImages.bind(this)
     this.renderLoader = this.renderLoader.bind(this)
     this.timer = this.timer.bind(this)
+    this.goTo = this.goTo.bind(this)
   }
 
   componentDidMount() {
@@ -56,6 +58,10 @@ class Slideshow extends Component {
       })
       .catch(err => {
         // need to handle error
+        this.setState({
+          loading: false
+        })
+        alert('Something went wrong');
         console.log(err);
       })
   }
@@ -93,18 +99,23 @@ class Slideshow extends Component {
     })
   }
 
+  goTo(i) {
+    console.log(i);
+  }
+
   renderLoader() {
     if(this.state.loading) return <Loader />
     return;
   }
 
   render() {
+    const { images, currentSlide } = this.state;
     return (
       <div className='slideshow'>
-        <h1>Slideshow</h1>
         {this.renderLoader()}
-        <Slides images={this.state.images} currentSlide={this.state.currentSlide}/>
+        <Slides images={images} currentSlide={currentSlide+1}/>
         <Controls prev={this.prev} next={this.next}/>
+        <Pagination currentSlide={currentSlide+1} goTo={this.goTo}/>
       </div>
     );
   }
